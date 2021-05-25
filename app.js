@@ -10,9 +10,9 @@ const initialWagonState = {
       case 'gather': {
         return {
           ...state,
-          supplies: state.supplies + 15,
+          supplies: state.supplies + 15 * action.payload,
           distance: state.distance,
-          days: state.days + 1,
+          days: state.days + 1 * action.payload,
           cash: state.cash
         }
       }
@@ -29,11 +29,14 @@ const initialWagonState = {
         }
       }
       case 'tippedWagon': {
+        if (state.supplies - 30 * action.payload < 0) {
+          return state;
+        }
         return {
           ...state,
-          supplies: state.supplies - 30,
+          supplies: state.supplies - 30 * action.payload,
           distance: state.distance,
-          days: state.days + 1,
+          days: state.days + 1 * action.payload,
           cash: state.cash
         }
       }
@@ -110,6 +113,14 @@ const initialWagonState = {
   wagon = gameReducer(wagon, action);
   console.log(wagon);
   
-  action = { type: 'theft', payload: 4 };
+  action = { type: 'theft', payload: 1 };
+  wagon = gameReducer(wagon, action);
+  console.log(wagon);
+  
+  action = { type: 'gather', payload: 100 };
+  wagon = gameReducer(wagon, action);
+  console.log(wagon);
+  
+  action = { type: 'tippedWagon', payload: 3 };
   wagon = gameReducer(wagon, action);
   console.log(wagon);
